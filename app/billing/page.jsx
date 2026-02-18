@@ -8,8 +8,11 @@ import BillingSummary from "../components/BillingSummary";
 import PastInvoices from "../components/PastInvoices";
 
 export default function BillingPage() {
-  const [totalFine, setTotalFine] = useState(0);
-  const [goldReceived, setGoldReceived] = useState(0);
+  const [billingData, setBillingData] = useState({
+    totalFine: 0,
+    goldReceived: 0,
+    previousDue: 0,
+  });
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -19,25 +22,14 @@ export default function BillingPage() {
         <Topbar />
 
         <div className="grid grid-cols-12 gap-6 mt-6">
-          
-          {/* LEFT SIDE */}
           <div className="col-span-8">
-            <BillingForm
-              setTotalFine={setTotalFine}
-              setGoldReceived={setGoldReceived}
-            />
+            <BillingForm setBillingData={setBillingData} />
           </div>
 
-          {/* RIGHT SIDE */}
           <div className="col-span-4 space-y-6">
-            <BillingSummary
-              totalFine={totalFine}
-              goldReceived={goldReceived}
-            />
-
+            <BillingSummary billingData={billingData} />
             <PastInvoices />
           </div>
-
         </div>
       </main>
     </div>

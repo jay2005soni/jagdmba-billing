@@ -36,3 +36,23 @@ select {
   background-color: white;
 }
 
+/* ================= PRINT FIX (FINAL) ================= */
+@media print {
+
+  body {
+    margin: 0;
+  }
+
+  /* Hide sidebar & everything */
+  body > *:not(#print-section) {
+    display: none !important;
+  }
+
+  #print-section {
+    display: block !important;
+    width: 100%;
+    background: white;
+    padding: 40px;
+  }
+
+}

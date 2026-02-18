@@ -10,11 +10,18 @@ import {
 import { db } from "../firebase/firestore";
 import DashboardLayout from "../components/DashboardLayout";
 import AddInventoryModal from "../components/AddInventoryModal";
+import UpdateStockModal from "../components/UpdateStockModal";
+import StockHistoryModal from "../components/StockHistoryModal";
+
+
 
 export default function StockPage() {
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
+  const [updateOpen, setUpdateOpen] = useState(false);
+const [historyOpen, setHistoryOpen] = useState(false);
+
 
   // 🔥 Fetch inventory
   const fetchInventory = async () => {
@@ -45,15 +52,48 @@ export default function StockPage() {
         Jewellery Inventory
       </h1>
 
-      <button
-        onClick={() => {
-          setEditItem(null);
-          setOpen(true);
-        }}
-        className="bg-black text-white px-4 py-2 rounded mb-4"
-      >
-        + Add Item
-      </button>
+     <div className="flex gap-3 mb-4">
+
+  {/* ADD ITEM */}
+ <div className="flex items-center mb-4">
+
+  {/* LEFT SIDE BUTTONS */}
+  <div className="flex gap-3">
+    <button
+      onClick={() => {
+        setEditItem(null);
+        setOpen(true);
+      }}
+      className="bg-black text-white px-4 py-2 rounded"
+    >
+      + Add Item
+    </button>
+
+    <button
+      onClick={() => setUpdateOpen(true)}
+      className="bg-yellow-600 text-white px-4 py-2 rounded"
+    >
+      Update Stock
+    </button>
+  </div>
+ <div className="w-200"></div>
+  {/* PUSH HISTORY TO RIGHT */}
+  <div className="ml-auto">
+    <button
+      onClick={() => setHistoryOpen(true)}
+     className="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-4 py-2 rounded shadow"
+
+    >
+      Stock History
+    </button>
+  </div>
+
+
+
+</div>
+
+
+</div>
 
       {/* Table */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
@@ -131,6 +171,19 @@ export default function StockPage() {
           </tbody>
         </table>
       </div>
+
+
+{historyOpen && (
+  <StockHistoryModal close={() => setHistoryOpen(false)} />
+)}
+
+
+{updateOpen && (
+  <UpdateStockModal
+    close={() => setUpdateOpen(false)}
+    refresh={fetchInventory}
+  />
+)}
 
       {/* MODAL */}
       {open && (

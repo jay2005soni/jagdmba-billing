@@ -1,5 +1,11 @@
-export default function BillingSummary({ totalFine, goldReceived }) {
-  const final = totalFine - Number(goldReceived || 0);
+export default function BillingSummary({ billingData }) {
+  const { totalFine, goldReceived, previousDue } = billingData;
+
+  const finalBalance =
+    previousDue + totalFine - goldReceived;
+
+  const isDue = finalBalance > 0;
+  const isAdvance = finalBalance < 0;
 
   return (
     <div className="bg-gradient-to-br from-pink-600 to-pink-700 text-white rounded-2xl p-8 shadow-xl">
@@ -8,29 +14,72 @@ export default function BillingSummary({ totalFine, goldReceived }) {
       </h3>
 
       <div className="space-y-6">
+
+        {/* Previous Due */}
         <div>
-          <p className="text-sm opacity-80">Fine Total</p>
-          <p className="text-3xl font-bold">
+          <p className="text-sm opacity-80">
+            Previous Due
+          </p>
+          <p className="text-2xl font-bold">
+            {previousDue.toFixed(3)} g
+          </p>
+        </div>
+
+        {/* Fine Total */}
+        <div>
+          <p className="text-sm opacity-80">
+            Fine Total
+          </p>
+          <p className="text-2xl font-bold">
             {totalFine.toFixed(3)} g
           </p>
         </div>
 
+        {/* Gold Received */}
         <div>
           <p className="text-sm opacity-80">
             Gold Received
           </p>
-          <p className="text-2xl font-semibold">
-            {goldReceived || 0} g
+          <p className="text-2xl font-bold">
+            {goldReceived.toFixed(3)} g
           </p>
         </div>
 
-        <div className="border-t border-white/30 pt-4">
+        {/* Final Balance */}
+        <div className="border-t border-white/30 pt-5">
           <p className="text-sm opacity-80">
             Final Balance
           </p>
-          <p className="text-2xl font-bold">
-            {final.toFixed(3)} g
+
+          <p
+            className={`text-3xl font-bold mt-2 ${
+              isDue
+                ? "text-red-200"
+                : isAdvance
+                ? "text-green-200"
+                : "text-white"
+            }`}
+          >
+            {finalBalance.toFixed(3)} g
           </p>
+
+          {isDue && (
+            <p className="text-red-200 text-sm mt-2">
+              🔴 Customer Due
+            </p>
+          )}
+
+          {isAdvance && (
+            <p className="text-green-200 text-sm mt-2">
+              🟢 Advance Balance
+            </p>
+          )}
+
+          {!isDue && !isAdvance && (
+            <p className="text-white text-sm mt-2">
+              ✅ Fully Settled
+            </p>
+          )}
         </div>
       </div>
     </div>
